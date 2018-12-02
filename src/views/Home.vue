@@ -10,14 +10,15 @@
                         <ul class="neon-left-menu">
                             <li :class="{'menu--selected' : selectedIndex === index}"
                                 v-for="(item, index) in [1,2,3,4,5,6]"
-                                @click="selectMenu(index)">MENU {{item}}</li>
+                                @click="selectMenu(index)">MENU {{item}}
+                            </li>
                         </ul>
                         <div data-hover-event="true"
                              class="neon-js-border neon-left__item--selected"
                              :style="computedBorderY"></div>
                     </nav>
                     <main>
-                        <button class="copy-button neon-button neon-js-button">BUTTON</button>
+                        <button data-hover-event="true" class="copy-button neon-js-border neon-button neon-js-button">BUTTON</button>
                     </main>
                 </div>
             </div>
@@ -43,19 +44,12 @@
         },
         mounted() {
 
-            this.itemHeight = parseInt(getComputedStyle(document.querySelector('.menu--selected')).height);
-            this.borderForSelected = document.querySelector('neon-left__item--selected')
-
-
-            document.querySelectorAll('.neon-js-border').forEach(function (parent) {
-                var neonBorder = new NeonBorder();
-                neonBorder.addNeonBorder(parent);
-            });
+            this.itemHeight = document.querySelector('.menu--selected').getBoundingClientRect().height;
+            this.borderForSelected = document.querySelector('neon-left__item--selected');
         },
         methods: {
             selectMenu(index) {
                 this.selectedIndex = index;
-                console.log(this.computedBorderY)
             }
         }
     }
@@ -86,6 +80,7 @@
     }
 
     .content-wrapper {
+        padding: 20px 0 0 0;
         height: calc(100% - 110px);
     }
 
@@ -111,7 +106,9 @@
     .neon-left-menu li {
         display: block;
         cursor: pointer;
-        padding: 30px 40px;
+        padding: 0 40px;
+        height: 70px;
+        line-height: 70px;
         position: relative;
         color: #ff00e9;
         border-color: #ff00e9;
@@ -140,6 +137,25 @@
 
     .neon-left-menu li:hover {
         text-shadow: 0 0 100px #ff00e9;
+    }
+
+    .neon-button {
+        font-size: 16px;
+        padding: 15px 20px;
+        margin: 0;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        font-weight: normal;
+        outline: none;
+        color: #ff00e9;
+        text-shadow: 0 0 10px #ff00e9;
+        transition: text-shadow 0.2s ease-out;
+    }
+
+    .neon-button:hover {
+        text-shadow: 0 0 20px #ff00e9;
     }
 
 </style>

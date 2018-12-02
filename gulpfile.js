@@ -32,11 +32,11 @@ var scssOptions = {
 const SOURCES = [
     // Component handler
     'src/lib/neon-style/js/ui_handler.js',
+    /*'src/lib/neon-style/js/ResizeObserver.js',*/
     // Polyfills/dependencies
     //'src/third_party/**/*.js',
     // Base components
     'src/lib/neon-style/js/neon_border.js',
-    'src/lib/neon-style/js/neon_button.js'
 ];
 
 gulp.task('build-js', function() {
@@ -56,7 +56,7 @@ gulp.task('build-js', function() {
 // building sass to css (compressing & minifying)
 gulp.task('build-sass', function(){
 
-    gulp.src([path.src.root + 'sass/neon_style.scss'])
+    gulp.src([path.src.root + 'lib/neon-style/sass/neon_style.scss'])
     // 소스맵 초기화
         .pipe(sourcemaps.init())
         // scss 함수에 옵션값을 설정, scss 작성시 watch가 멈추지 않도록 logError를 설정

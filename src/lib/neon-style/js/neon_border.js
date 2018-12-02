@@ -13,15 +13,25 @@
     };
 
     NeonBorder.prototype.getComputedStyle = function(element, attribute, isNumber) {
-        var computedStyle = getComputedStyle(element)[attribute];
-        return isNumber ? parseInt(computedStyle) : computedStyle;
+        var computedStyle = null
+        if(element.currentStyle) {
+            computedStyle = element.currentStyle[attribute];
+            return isNumber ? parseInt(computedStyle) : computedStyle;
+        }
+
+        if(window.getComputedStyle) {
+            computedStyle = getComputedStyle(element)[attribute];
+            return isNumber ? parseInt(computedStyle) : computedStyle;
+        }
+
+
     };
 
     NeonBorder.prototype.init = function (width, height, neonBorderColor) {
 
         this.width = width;
         this.height = height;
-        this.borderColor = neonBorderColor ? neonBorderColor : '#00ffd0';
+        this.borderColor = neonBorderColor ? neonBorderColor : 'black';
         this.hasHoverEvent = !!this.targetElement.getAttribute('data-hover-event');
 
         this.element_ = document.createElement('canvas');
@@ -46,8 +56,8 @@
     };
 
     NeonBorder.prototype.resizeBorder = function () {
-        var neonBorderWidth = this.getComputedStyle(this.targetElement, 'width', true) + this.Constant_.borderOffset * 2;
-        var neonBorderHeight = this.getComputedStyle(this.targetElement, 'height', true) + this.Constant_.borderOffset * 2;
+        var neonBorderWidth = this.targetElement.getBoundingClientRect().width + this.Constant_.borderOffset * 2;
+        var neonBorderHeight = this.targetElement.getBoundingClientRect().height + this.Constant_.borderOffset * 2;
         this.element_.width = neonBorderWidth;
         this.element_.height = neonBorderHeight;
         this.makeBackgroundStyle();
@@ -78,19 +88,20 @@
 
     NeonBorder.prototype.addNeonBorder = function(parentElement) {
         this.targetElement = parentElement;
-        var neonBorderWidth = this.getComputedStyle(parentElement, 'width', true) + this.Constant_.borderOffset * 2;
-        var neonBorderHeight = this.getComputedStyle(parentElement, 'height', true) + this.Constant_.borderOffset * 2;
+        var neonBorderWidth = parentElement.getBoundingClientRect().width + this.Constant_.borderOffset * 2;
+        var neonBorderHeight = parentElement.getBoundingClientRect().height + this.Constant_.borderOffset * 2;
         var neonBorderColor = this.getComputedStyle(parentElement, 'borderColor');
         var neonBorder = this.init(neonBorderWidth, neonBorderHeight, neonBorderColor);
         parentElement.insertBefore(neonBorder, parentElement.children[0]);
-    }
+
+    };
 
     NeonBorder.prototype.makeBackgroundOverStyle = function () {
-        this.makeNeonBorder(4, 30, 9);
+        this.makeNeonBorder(4, 20, 9);
     };
 
     NeonBorder.prototype.makeBackgroundStyle = function () {
-        this.makeNeonBorder(3, 20, 10);
+        this.makeNeonBorder(3, 10, 10);
     };
 
     NeonBorder.prototype.roundRect = function (context, color, strokeWidth, radius, x, y, width, height, hasShadow, shadowBlur) {
@@ -130,4 +141,14 @@
     };
 
     window.NeonBorder = NeonBorder;
+
+    window.onload = function() {
+        setTimeout(function() {
+            Array.apply(null, document.querySelectorAll('.neon-js-border')).forEach(function (parent) {
+                var neonBorder = new NeonBorder();
+                neonBorder.addNeonBorder(parent);
+            });
+        },0)
+
+    }
 })();
